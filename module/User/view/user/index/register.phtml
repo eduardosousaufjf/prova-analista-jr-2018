@@ -1,0 +1,117 @@
+<div class="register-logo">
+    <p><b>Eduardo</b> Sousa</p>
+</div>
+
+<div class="register-box-body">
+    <p class="login-box-msg">Registrar novo membro</p>
+
+    <?php
+    echo $this->flashMessenger()->render('error', ['alert alert-danger alert-dismissible']);
+    echo $this->flashMessenger()->render('success', ['alert alert-success alert-dismissible']);
+    ?>
+
+    <?php echo $this->form()->openTag($this->form); ?>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_nome')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_nome')); ?>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_nome')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_email')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formEmail($this->form->get('usuario_email')); ?>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_email')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_senha')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formPassword($this->form->get('usuario_senha')); ?>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_senha')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_telefone')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_telefone')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_telefone')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_logradouro')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_logradouro')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_logradouro')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_numero')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_numero')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_numero')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_complemento')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_complemento')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_complemento')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_bairro')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_bairro')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_bairro')); ?>
+    </div>
+    <div class="form-group<?php echo $this->formElementErrors($this->form->get('usuario_cep')) ? ' has-error' : ''; ?> has-feedback">
+        <?php echo $this->formText($this->form->get('usuario_cep')); ?>
+        <span class="glyphicon glyphicon-list-alt form-control-feedback"></span>
+        <?php echo $this->formElementErrors($this->form->get('usuario_cep')); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formRow($this->form->get('usuario_estado_id')); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formRow($this->form->get('usuario_cidade_id')); ?>
+    </div>
+
+
+    <?php echo $this->formHidden($this->form->get('csrf')); ?>
+    <div class="row">
+        <div class="pull-right col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Registrar</button>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+
+    <?php
+    $script =
+        '(function($, window) {
+    $.fn.replaceOptions = function(options) {
+        var self, $option;
+
+        this.empty();
+        self = this;
+
+        $.each(options, function(index, option) {
+            $option = $("<option></option>")
+                .attr("value", option.cidade_id)
+                .text(option.cidade_nome);
+            self.append($option);
+        });
+    };
+})(jQuery, window);
+
+
+$(document).ready(function () {
+    $("#estado_id").on("change", function () {
+        var opcao = $("#estado_id").children("option:selected").val();
+        $.ajax({
+            url: "http://localhost:8080/user/filter/" + opcao, success: function (result) {
+
+                $("#cidade_id").replaceOptions(result);
+                console.log(result)
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    })
+})
+
+
+';
+    $this->inlineScript()->appendScript($script);
+
+    ?>
+
+    <a href="<?= $this->url('auth.login'); ?>" class="text-center">Eu já tenho cadastro</a><br>
+</div>
